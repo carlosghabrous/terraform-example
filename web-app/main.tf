@@ -2,9 +2,9 @@ terraform {
   # Assumes s3 bucket and dynamo DB table already set up
   # See /code/03-basics/aws-backend
   backend "s3" {
-    bucket         = "ghab-tf-course-state"
+    bucket         = var.bucket_name
     key            = "03-basics/web-app/terraform.tfstate"
-    region         = "eu-central-1"
+    region         = var.region
     dynamodb_table = "terraform-state-locking"
     encrypt        = true
   }
@@ -18,12 +18,12 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-central-1"
+  region = var.region
 }
 
 resource "aws_instance" "instance_1" {
-  ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
+  ami             = var.ami
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
@@ -33,8 +33,8 @@ resource "aws_instance" "instance_1" {
 }
 
 resource "aws_instance" "instance_2" {
-  ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS // us-east-1
-  instance_type   = "t2.micro"
+  ami             = var.ami
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
@@ -187,12 +187,12 @@ resource "aws_lb" "load_balancer" {
 }
 
 resource "aws_route53_zone" "primary" {
-  name = "devopsdeployed.com"
+  name = var.domain
 }
 
 resource "aws_route53_record" "root" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "devopsdeployed.com"
+  name    = var.domain
   type    = "A"
 
   alias {
@@ -213,9 +213,9 @@ resource "aws_db_instance" "db_instance" {
   engine                     = "postgres"
   engine_version             = "12"
   instance_class             = "db.t2.micro"
-  name                       = "mydb"
-  username                   = "foo"
-  password                   = "foobarbaz"
+  name                       = var.db_name
+  username                   = var.db_user
+  password                   = var.db_password
   skip_final_snapshot        = true
 }
 

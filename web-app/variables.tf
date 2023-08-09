@@ -46,5 +46,5 @@ variable "db_password" {
 
 variable "bucket_prefix" {
   description = "prefix of s3 bucket for app data"
-  type = string
+  type        = string
 }

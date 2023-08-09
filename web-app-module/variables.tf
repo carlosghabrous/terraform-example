@@ -4,6 +4,18 @@ variable "region" {
   default     = "eu-central-1"
 }
 
+variable "app_name" {
+  description = "Web app's name"
+  type = string
+  default = "web-app"
+}
+
+variable "environment_name" {
+  description = "Deployment environment (dev/staging/production)"
+  type        = string
+  default     = "dev"
+}
+
 variable "ami" {
   description = "Amazon machine image to use for ec2 instance"
   type        = string
@@ -16,16 +28,21 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-variable "bucket_name" {
+variable "bucket_prefix" {
   description = "Application's S3 bucket name"
   type        = string
   default     = "ghab-tf-course-state"
 }
 
-variable "domain" {
-  description = "The app's domain"
-  type        = string
+variable "create_dns_zone" {
+  description = "If true, create new route53 zone, if false read existing route53 zone"
+  type        = bool
+  default     = false
+}
 
+variable "domain" {
+  description = "Domain for website"
+  type        = string
 }
 
 variable "db_name" {

@@ -6,8 +6,8 @@ variable "region" {
 
 variable "app_name" {
   description = "Web app's name"
-  type = string
-  default = "web-app"
+  type        = string
+  default     = "web-app"
 }
 
 variable "environment_name" {
